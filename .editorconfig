@@ -1,0 +1,25 @@
+# top-most EditorConfig file
+root = true
+
+[*]
+insert_final_newline = true
+charset = utf-8
+indent_style = space
+indent_size = 4
+
+[*.cs]
+
+# CA1303: Do not pass literals as localized parameters (fine for logging)
+dotnet_diagnostic.CA1303.severity = none
+
+# CA2007: Consider calling ConfigureAwait on the awaited task (not needed in ASP.NET Core)
+dotnet_diagnostic.CA2007.severity = none
+
+# CA1062: Validate arguments of public methods (using C# 8.0 nullable reference types and public methods called by framework)
+dotnet_diagnostic.CA1062.severity = none
+
+# IDE0052: Remove unread private members
+dotnet_diagnostic.IDE0052.severity = warning
+
+# IDE0005: Using directive is unnecessary.
+dotnet_diagnostic.IDE0005.severity = warning

@@ -1,0 +1,576 @@
+@page
+@using Huxley2.Interfaces
+@inject IUpdateCheckService UpdateCheckService
+@{
+    const string crs = "bhm";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Huxley 2 - Community Edition</title>
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+<div class="row">
+<div class="col">
+
+<div class="jumbotron mt-4 p-4">
+    <img src="~/img/huxley.png" alt="Huxley proxy logo" class="float-right" width="100"/>
+    <h1 class="display-4">Huxley 2 <small>Community Edition</small></h1>
+    <p class="lead">A cross-platform JSON proxy for the GB railway Live Departure Boards SOAP API</p>
+    <hr class="my-4">
+    <p>
+        Huxley 2 is a <abbr title="Cross-Origin Resource Sharing">CORS</abbr> enabled
+        cross-platform <abbr title="JavaScript Object Notation">JSON</abbr>
+        <abbr title="Representational State Transfer">ReST</abbr> proxy for the
+        <abbr title="Great Britain">GB</abbr>
+        <abbr title="National Rail Enquiries">NRE</abbr>
+        <abbr title="Live Departure Boards">LDB</abbr>
+        <abbr title="Windows Communication Foundation">WCF</abbr>
+        <a href="http://harmful.cat-v.org/software/xml/soap/simple">
+            <abbr title="Simple Object Access Protocol">SOAP</abbr>
+        </a> <abbr title="Extensible Markup Language">XML</abbr>
+        <abbr title="Application Programming Interface">API</abbr>
+        (called <a href="https://www.nationalrail.co.uk/100296.aspx">Darwin</a>).
+        It supports both the Public Version (PV) and the Staff Version (SV).
+        It's built with ASP.NET Core <abbr title="Long Term Support">LTS</abbr>, C# 8.0 and lots of abbreviations!
+    </p>
+    <p>
+        The primary purpose of Huxley 2 is to allow easy use of the LDB API from browser-based client-side
+        <abbr title="Progressive Web Applications">PWAs</abbr> made with JavaScript or TypeScript.
+        Additionally, it opens up the Windows enterprise API to agile developers on macOS and Linux.
+    </p>
+    <p>
+        <a class="btn btn-success btn-lg mt-3" href="#quick-start" role="button">Get Started</a>
+    </p>
+    <p>
+        Version @UpdateCheckService.CurrentVersion
+    </p>
+    @if (UpdateCheckService.UpdateAvailable)
+    {
+        <div class="alert alert-info m-0" role="alert">
+            <a href="@UpdateCheckService.UpdateUrl?.AbsoluteUri">@UpdateCheckService.AvailableVersion</a>
+            is available
+        </div>
+    }
+</div>
+
+<h2>Contents</h2>
+<ul>
+    <li>
+        <a href="#v2-changes">
+            Version 2 Changes
+        </a>
+    </li>
+    <li>
+        <a href="#quick-start">
+            Quick Start
+        </a>
+    </li>
+    <li>
+        <a href="#access-tokens">
+            Access Tokens
+        </a>
+    </li>
+    <li>
+        <a href="#api-endpoints">
+            API Endpoints
+        </a>
+        <ul>
+            <li>
+                <a href="#station-boards">
+                    Station Boards
+                </a>
+                <ul>
+                    <li>
+                        <a href="#url-format">
+                            URL Format
+                        </a>
+                    </li>
+                    <li>
+                        Public
+                        <ul>
+                            <li>
+                                <a href="#departures">
+                                    Departures
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#arrivals">
+                                    Arrivals
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#all">
+                                    Departures and Arrivals
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#next">
+                                    Next
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#fastest">
+                                    Fastest
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        Staff
+                        <ul>
+                            <li>
+                                <a href="#staff-departures">
+                                    Staff Departures
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#staff-arrivals">
+                                    Staff Arrivals
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#staff-all">
+                                    Staff Departures and Arrivals
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#staff-next">
+                                    Staff Next
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#staff-fastest">
+                                    Staff Fastest
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#delays">
+                            Delays
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#crs">
+                    CRS Station Codes
+                </a>
+            </li>
+            <li>
+                <a href="#service">
+                    Service Details
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#source-code">
+            Source Code
+        </a>
+    </li>
+    <li>
+        <a href="#license">
+            License
+        </a>
+    </li>
+</ul>
+
+<h2 id="v2-changes">Version 2 Changes</h2>
+<p>
+    There are some significant changes from version 1:
+</p>
+<ul>
+    <li>
+        Reimplementation on ASP.NET Core allowing Huxley to run on Windows, macOS and Linux
+        <ul>
+            <li>
+                You can now use Huxley on any platform (pun intended)
+            </li>
+            <li>
+                .NET Core 3.1 LTS supported until 2022-12-03
+            </li>
+        </ul>
+    </li>
+    <li>
+        Support for time offset and window parameters allowing queries for past trains
+    </li>
+    <li>
+        Station code retrieval from staff reference web service (if staff token is in settings)
+    </li>
+    <li>
+        Optional update check
+    </li>
+    <li>
+        Response caching support (wasn't available on old WebAPI controllers)
+    </li>
+    <li>
+        Improved performance and flexible architecture using agile best practices
+    </li>
+    <li>
+        Modern and simplified code base using the latest C# language features
+        <ul>
+            <li>
+                C# 8.0 nullable and non-nullable reference types used throughout
+            </li>
+            <li>
+                A full suite of automated unit tests and CI/CD pipelines
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<h2 id="quick-start">Quick Start</h2>
+<p>
+    Follow these steps to get going:
+</p>
+<ul>
+    <li>
+        Get an API access token from NRE
+        (<a href="https://realtime.nationalrail.co.uk/OpenLDBWSRegistration/Registration">public</a>
+        or <a href="http://openldbsv.nationalrail.co.uk/self-signup/register">staff</a> or both)
+    </li>
+    <li>
+        Append <code>accessToken=TOKEN</code> to the URL for every request
+    </li>
+</ul>
+<p>
+    If you don't want to append the token then read on.
+</p>
+
+<h2 id="access-tokens">Access Tokens</h2>
+<p>
+    You will need to add your access token to the configuration file or URL.
+    You can register to obtain one <a href="https://realtime.nationalrail.co.uk/OpenLDBWSRegistration/Registration">here</a>
+    (or <a href="http://openldbsv.nationalrail.co.uk/self-signup/register">here</a> for the staff version).
+</p>
+<p>
+    Append <code>accessToken={Your GUID token}</code> to the URL for every request.
+    If using the staff versions then you will need to use your staff token.
+</p>
+<p>
+    There is optional support for configuring the access token server-side.
+    So you don't need to worry about revealing it in URLs or source code.
+</p>
+<p>
+    In the <code>appsettings.json</code> file you can set tokens and other settings.
+    You can set <code>DarwinAccessToken</code> to your NRE access token.
+    If you leave <code>ClientAccessToken</code> as an empty string then no token is required in the Huxley URL.
+    If you set <code>ClientAccessToken</code> to a string and it matches the token in the URL then the <code>DarwinAccessToken</code> will be used instead in the SOAP call.
+    Otherwise the URL token is passed straight through.
+</p>
+<p>
+    You can do the same with <code>DarwinStaffAccessToken</code> if you are using the staff version of the API.
+    Both share a <code>ClientAccessToken</code> so your client only needs one token (or none).
+</p>
+<p>
+    <strong>N.B.</strong> You should set up these tokens in your deployment platform and not in your source code repository. You'll notice that the values are blank by default.
+</p>
+
+<h2 id="api-endpoints">API Endpoints</h2>
+<p>
+    Most of these endpoints (except delays and crs) map directly to the SOAP API.
+    Refer to the official documentation pages for the
+    <a href="https://lite.realtime.nationalrail.co.uk/OpenLDBWS/">public</a> and
+    <a href="https://lite.realtime.nationalrail.co.uk/OpenLDBSVWS/">staff</a> web services
+    for more details, but be aware that these are not entirely accurate.
+</p>
+
+<h3 id="station-boards">Station Boards</h3>
+<p>
+    There are five station boards and their staff equivalents, plus a delays board that Huxley provides.
+</p>
+
+<h4 id="url-format">URL Format</h4>
+<p>
+    The URL format is <code>{board}/{CRS|StationName}/{filterType}/{filterCRS|StationName}/{numRows}</code> or
+    <code>{board}/{CRS|StationName}/{numRows}</code> (arrivals/departures only) where only board and CRS (or a station name) are required.
+    The filter type can be either <code>to</code> or <code>from</code> (case is not important).
+</p>
+<p>
+    A station name can be used in place of CRS codes if the name matches only one station (or matches one exactly) but case is not important.
+    See the CRS section below for more information.
+</p>
+<p>
+    For all boards (except delays) you can add an <code>expand=true</code> parameter to embed all service details into the board response.
+    The delays board is expanded by default.
+</p>
+<p>
+    <code>
+        <a href="/all/@crs?expand=true">/all/{CRS|StationName}?expand=true</a>
+    </code>
+</p>
+<p>
+    You can optionally add <code>timeOffset</code> (-120 to 119 inclusive) and <code>timeWindow</code> (-120 to 120 inclusive) parameters in minutes.
+    For example, to get services for the next hour and last fifteen minutes:
+    <code>
+        <a href="/all/@crs?timeOffset=-15&timeWindow=75">/all/{CRS|StationName}?timeOffset=-15&amp;timeWindow=75</a>
+    </code>
+</p>
+<h5>Examples:</h5>
+<ul>
+    <li>
+        10 (default value) Arrivals and Departures at Clapham Junction:
+        <code>
+            <a href="/all/clj">/all/clj</a>
+        </code>
+    </li>
+    <li>
+        15 Arrivals and Departures at Clapham Junction:
+        <code>
+            <a href="/all/clj/15">/all/clj/15</a>
+        </code>
+    </li>
+    <li>
+        10 (default value) Departures at Clapham Junction to Waterloo:
+        <code>
+            <a href="/departures/clj/to/wat">/departures/clj/to/wat</a>
+        </code>
+    </li>
+    <li>
+        15 Arrivals at Clapham Junction from Waterloo:
+        <code>
+            <a href="/arrivals/clj/from/wat/15">/arrivals/clj/from/wat/15</a>
+        </code>
+    </li>
+    <li>
+        10 (default value) Arrivals and Departures at Wandsworth Common to Clapham Junction:
+        <code>
+            <a href="/all/wandsworth common/to/clapham junction">/all/wandsworth common/to/clapham junction</a>
+        </code>
+    </li>
+    <li>
+        20 Departures at East Croydon to London Victoria:
+        <code>
+            <a href="/departures/east croydon/to/london victoria/20">/departures/east croydon/to/london victoria/20</a>
+        </code>
+    </li>
+</ul>
+<h4 id="departures">Departures</h4>
+<p>
+    <code>
+        <a href="/departures/@crs">/departures/{CRS|StationName}</a>
+    </code>
+</p>
+<h4 id="arrivals">Arrivals</h4>
+<p>
+    <code>
+        <a href="/arrivals/@crs">/arrivals/{CRS|StationName}</a>
+    </code>
+</p>
+<h4 id="all">Departures and Arrivals</h4>
+<p>
+    <code>
+        <a href="/all/@crs">/all/{CRS|StationName}</a>
+    </code>
+</p>
+<h4 id="next">Next</h4>
+<p>
+    <code>
+        <a href="/next/glc/to/edb,mln">/next/{CRS|StationName}/{filterType}/{filterCRSs|StationNames}</a>
+    </code>
+</p>
+<p>Filter stations can be a comma separated list. Filter type and number of rows are ignored.</p>
+<h4 id="fastest">Fastest</h4>
+<p>
+    <code>
+        <a href="/fastest/glc/to/edb,mln">/fastest/{CRS|StationName}/{filterType}/{filterCRSs|StationNames}</a>
+    </code>
+</p>
+<p>Filter stations can be a comma separated list. Filter type and number of rows are ignored.</p>
+
+<h4 id="staff-departures">Staff Departures</h4>
+<p>
+    <code>
+        <a href="/staffdepartures/@crs">/staffdepartures/{CRS|StationName}</a>
+    </code>
+</p>
+<h4 id="staff-arrivals">Staff Arrivals</h4>
+<p>
+    <code>
+        <a href="/staffarrivals/@crs">/staffarrivals/{CRS|StationName}</a>
+    </code>
+</p>
+<h4 id="staff-all">Staff Departures and Arrivals</h4>
+<p>
+    <code>
+        <a href="/staffall/@crs">/staffall/{CRS|StationName}</a>
+    </code>
+</p>
+<h4 id="staff-next">Staff Next</h4>
+<p>
+    <code>
+        <a href="/staffnext/glc/to/edb,mln">/staffnext/{CRS|StationName}/{filterType}/{filterCRSs|StationNames}</a>
+    </code>
+</p>
+<h4 id="staff-fastest">Staff Fastest</h4>
+<p>
+    <code>
+        <a href="/stafffastest/glc/to/edb,mln">/stafffastest/{CRS|StationName}/{filterType}/{filterCRSs|StationNames}</a>
+    </code>
+</p>
+
+<h4 id="delays">Delays</h4>
+<p>The <strong>delays</strong> action performs calculations server side to easily let you know if there are problems on a particular route. Filter is required.</p>
+<p>
+    <code>
+        <a href="/delays/clapham junction/from/london/10">/delays/{CRS|StationName}/{filterType}/{filterCRS|StationName}/{numRows}</a>
+    </code>
+</p>
+<p>
+    Additionally, this action will accept <code>LON</code> or <code>London</code> as a filter CRS to find trains going to or coming from
+    any of the <a href="https://www.nationalrail.co.uk/times_fares/ticket_types/46587.aspx#terminals">London Terminals</a>.
+</p>
+<p>
+    You can also pass in a comma separated list of 24 hour train times to filter on (e.g. <code>/delays/btn/to/lon/10/0729,0744,0748</code>).
+</p>
+<details>
+    <summary>
+        <strong>Sample Response</strong>
+    </summary>
+    <pre>
+{
+  "generatedAt": "@DateTime.Now.ToString("o")",
+  "locationName": "Clapham Junction",
+  "crs": "CLJ",
+  "filterLocationName": "London",
+  "filtercrs": "LON",
+  "filterType": 1,
+  "delays": true,
+  "totalTrainsDelayed": 1,
+  "totalDelayMinutes": 0,
+  "totalTrains": 6,
+  "delayedTrains": [
+    {
+      "origin": [
+        {
+          "locationName": "London Victoria",
+          "crs": "VIC",
+          "via": null,
+          "futureChangeTo": null,
+          "assocIsCancelled": false
+        }
+      ],
+      "destination": [
+        {
+          "locationName": "Littlehampton",
+          "crs": "LIT",
+          "via": "via Hove & Worthing",
+          "futureChangeTo": null,
+          "assocIsCancelled": false
+        }
+      ],
+      "currentOrigins": null,
+      "currentDestinations": null,
+      "rsid": "SN382200",
+      "serviceIdPercentEncoded": "Aum4%2FnXk%2B02wKUVqlS7JAQ%3D%3D",
+      "serviceIdGuid": "feb8e902-e475-4dfb-b029-456a952ec901",
+      "serviceIdUrlSafe": "Aum4_nXk-02wKUVqlS7JAQ",
+      "sta": "@DateTime.Now.ToString("HH:mm")",
+      "eta": "Delayed",
+      "std": "@DateTime.Now.ToString("HH:mm")",
+      "etd": "Delayed",
+      "platform": "13",
+      "operator": "Southern",
+      "operatorCode": "SN",
+      "isCircularRoute": false,
+      "isCancelled": false,
+      "filterLocationCancelled": false,
+      "serviceType": 0,
+      "length": 8,
+      "detachFront": false,
+      "isReverseFormation": false,
+      "cancelReason": null,
+      "delayReason": "This train has been delayed by a fault on this train",
+      "serviceID": "Aum4/nXk+02wKUVqlS7JAQ==",
+      "adhocAlerts": null
+    }
+  ]
+}
+</pre>
+</details>
+<h3 id="crs">CRS Station Codes</h3>
+<p><abbr title="Computer Reservation System">CRS</abbr> station codes are available from the following endpoint:</p>
+<p>
+    <code>
+        <a href="/crs">/crs/{query}</a>
+    </code>
+</p>
+<p>
+    If <code>query</code> is omitted then all CRS codes are returned along with their respective station names.
+    <br/>
+    If <code>query</code> is provided then only station names matching it will be returned along with their CRS codes.
+</p>
+<details>
+    <summary>Example response for<code>/crs/oswald</code></summary>
+    <pre>
+[
+  {
+    "stationName": "Church & Oswaldtwistle",
+    "crsCode": "CTW"
+  },
+  {
+    "stationName": "Lazonby & Kirkoswald",
+    "crsCode": "LZB"
+  }
+]
+</pre>
+</details>
+<p>
+    <code>
+        <a href="/crs/london terminals">/crs/london terminals</a>
+    </code> returns all codes in the <a href="https://en.wikipedia.org/wiki/London_station_group">London station group</a>
+</p>
+<h3 id="service">Service</h3>
+<p>
+    <code>
+        <a href="/service/_vEUZIJWLTtViDnv5GVpuw">/service/{Service ID}</a>
+    </code>
+</p>
+<p>
+    The service ID can be found for each service inside the departures and arrivals response.
+    Huxley also returns the ID in URL percent encoded, GUID and <a href="https://en.wikipedia.org/wiki/Base64#URL_applications">URL safe Base64</a> representations (for non-staff boards).
+    Likewise, the service endpoint will accept <a href="https://tools.ietf.org/html/rfc4648#section-5">URL safe Base64</a> service IDs, from various different encoders.
+</p>
+<p>
+    This endpoint also accepts the <a href="/service/8c105350-4235-44f3-b076-87fe829c577e">GUID representation of the ID</a>
+    as <code>/</code>, <code>+</code> and case sensitivity can cause trouble if you're not careful.
+</p>
+<p>
+    If the ID is a RID (a 15 digit long integer) then the staff API will be used. In this case a staff access token must be used (unless configured server side).
+</p>
+
+<h2 id="source-code">Source Code</h2>
+<p>
+    <a href="https://github.com/jpsingleton/Huxley2">Source code is available on GitHub</a>.
+</p>
+<p>
+    This project is treeware! If you found it useful then please <a href="https://offset.earth/unitsetsoftware" rel="nofollow">plant a tree for me</a>.
+</p>
+<p>
+    <a href="https://offset.earth/unitsetsoftware" rel="nofollow"><img src="~/img/buy-me-a-tree.svg" alt="Buy me a tree!"></a>
+</p>
+
+<h2 id="license">License</h2>
+<p>
+    Licensed under the <a href="https://joinup.ec.europa.eu/collection/eupl/introduction-eupl-licence">EUPL</a>-1.2-or-later.
+</p>
+<p>
+    The <abbr title="European Union Public Licence">EUPL</abbr> covers distribution through a network or SaaS 
+    (like a compatible and interoperable <abbr title="Affero General Public License">AGPL</abbr>).
+</p>
+
+<hr/>
+<p>&copy; @DateTime.Today.Year <a href="https://unop.uk">James Singleton</a></p>
+<p>
+    <img src="~/img/nre-logo.png" alt="powered by National Rail Enquiries" width="256"/>
+</p>
+
+</div>
+</div>
+</div>
+</body>
+</html>
