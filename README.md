@@ -23,7 +23,7 @@ It can (and regularly does) go down or break.
 
 ## Get Your Own
 
-TODO: Blog post with instructions
+There are detailed instructions on how to host your own instance on Azure in [this blog post](https://unop.uk/huxley-2-release/).
 
 ## License
 
