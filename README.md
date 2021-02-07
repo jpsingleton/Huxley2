@@ -25,6 +25,18 @@ It can (and regularly does) go down or break.
 
 There are detailed instructions on how to host your own instance on Azure in [this blog post](https://unop.uk/huxley-2-release/).
 
+### Running with Docker
+
+1. Ensure you have Docker and Docker Compose installed
+2. Create an `.env` file in the `Huxley2` directory with the access tokens. You can delete the ones you're not using. Example:
+```
+ACCESS_TOKEN=abcde12345
+STAFF_ACCESS_TOKEN=abcde12345
+CLIENT_ACCESS_TOKEN=abcde12345
+```
+3. Run `docker-compose up`
+4. The app should be available at `localhost:8081`
+
 ## License
 
 Licensed under the [EUPL-1.2-or-later](https://joinup.ec.europa.eu/collection/eupl/introduction-eupl-licence).

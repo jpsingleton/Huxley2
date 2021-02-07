@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  huxley2:
+    build: .
+    environment:
+      - DarwinAccessToken=${ACCESS_TOKEN}
+      - DarwinStaffAccessToken=${STAFF_ACCESS_TOKEN}
+      - ClientAccessToken=${CLIENT_ACCESS_TOKEN}
+    ports:
+      - "8081:80"
