@@ -39,12 +39,18 @@ CLIENT_ACCESS_TOKEN=abcde12345
 
 ## Station Codes File
 
-If you need to regenerate [the station codes CSV file in this repo](https://raw.githubusercontent.com/jpsingleton/Huxley2/master/station_codes.csv) then you can do so easily with [`jq`](https://stedolan.github.io/jq/) (and `curl`) using an instance that has access to the staff API. On Linux, you can install simply with your package manager, e.g. `sudo apt install jq` (on Ubuntu/Debian).
+If you need to regenerate [the station codes CSV file in this repo](https://raw.githubusercontent.com/jpsingleton/Huxley2/master/station_codes.csv) then you can do so easily with [`jq`](https://stedolan.github.io/jq/) (and `curl`) using an instance that has access to the staff API (and has been restarted recently). On Linux, you can install simply with your package manager, e.g. `sudo apt install jq` (on Ubuntu/Debian).
 
 For example, using the Huxley 2 demo instance you can run this one-liner:
 
 ```bash
 curl --silent https://huxley2.azurewebsites.net/crs | jq -r '(.[0] | keys_unsorted) as $keys | $keys, map([.[ $keys[] ]])[] | @csv' > station_codes.csv
+```
+
+If using a local server with a self-signed certificate:
+
+```bash
+curl --silent --insecure https://localhost:5001/crs | jq -r '(.[0] | keys_unsorted) as $keys | $keys, map([.[ $keys[] ]])[] | @csv' > station_codes.csv
 ```
 
 ## License
