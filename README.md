@@ -12,7 +12,7 @@ This project is treeware! If you found it useful then please [plant a tree for m
 
 Huxley 2 is a CORS enabled cross-platform JSON ReST proxy for the GB NRE LDB WCF SOAP XML API (called Darwin). It supports both the Public Version (PV) and the Staff Version (SV). It's built with ASP.NET Core LTS, C# 8.0 and lots of abbreviations!
 
-The primary purpose of Huxley 2 is to allow easy use of the LDB API from browser-based client-side PWAs made with JavaScript or TypeScript. Additionally, it opens up the Windows enterprise API to agile developers on macOS and Linux. 
+The primary purpose of Huxley 2 is to allow easy use of the LDB API from browser-based client-side PWAs made with JavaScript or TypeScript. Additionally, it opens up the Windows enterprise API to agile developers on macOS and Linux.
 
 ## Get Started
 
@@ -36,6 +36,16 @@ CLIENT_ACCESS_TOKEN=abcde12345
 ```
 3. Run `docker-compose up`
 4. The app should be available at `localhost:8081`
+
+## Station Codes File
+
+If you need to regenerate [the station codes CSV file in this repo](https://raw.githubusercontent.com/jpsingleton/Huxley2/master/station_codes.csv) then you can do so easily with [`jq`](https://stedolan.github.io/jq/) (and `curl`) using an instance that has access to the staff API. On Linux, you can install simply with your package manager, e.g. `sudo apt install jq` (on Ubuntu/Debian).
+
+For example, using the Huxley 2 demo instance you can run this one-liner:
+
+```bash
+curl --silent https://huxley2.azurewebsites.net/crs | jq -r '(.[0] | keys_unsorted) as $keys | $keys, map([.[ $keys[] ]])[] | @csv' > station_codes.csv
+```
 
 ## License
 
