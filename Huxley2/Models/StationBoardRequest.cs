@@ -44,11 +44,11 @@ namespace Huxley2.Models
         public FilterType FilterType { get; set; } = FilterType.to;
 
         [FromQuery]
-        [Range(-120, 119)]
+        [Range(-120, 1440)]
         public int TimeOffset { get; set; } = 0;
 
         [FromQuery]
-        [Range(-120, 120)]
+        [Range(-120, 1440)]
         public int TimeWindow { get; set; } = 120;
 
         [FromQuery]
