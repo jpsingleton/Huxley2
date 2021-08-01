@@ -1,4 +1,4 @@
-﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
+// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
 using Huxley2.Interfaces;
 using Huxley2.Models;
@@ -56,6 +56,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -84,6 +85,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -112,6 +114,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -140,6 +143,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -168,6 +172,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -196,6 +201,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -220,6 +226,7 @@ namespace Huxley2.Services
                 filterList = MakeFilterList(request.FilterList, 15),
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -244,6 +251,7 @@ namespace Huxley2.Services
                 filterList = MakeFilterList(request.FilterList, 10),
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -268,6 +276,7 @@ namespace Huxley2.Services
                 filterList = MakeFilterList(request.FilterList, 25),
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 
@@ -292,6 +301,7 @@ namespace Huxley2.Services
                 filterList = MakeFilterList(request.FilterList, 10),
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = request.Services,
             };
         }
 

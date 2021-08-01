@@ -1,4 +1,4 @@
-﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
+// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
 using Microsoft.AspNetCore.Mvc;
 using OpenLDBWS;
@@ -55,5 +55,8 @@ namespace Huxley2.Models
         public bool Expand { get; set; } = false;
 
         public string Std { get; set; } = string.Empty;
+
+        [FromQuery]
+        public string Services { get; set; } = "PBS";
     }
 }
