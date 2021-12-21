@@ -12,22 +12,18 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - task: UseDotNet@2
-      displayName: "Use .NET Core SDK 3.1.x"
+      displayName: "Use .NET 6.0 SDK"
       env:
         DOTNET_CLI_TELEMETRY_OPTOUT: true
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+        DOTNET_NOLOGO: true
       inputs:
         packageType: 'sdk'
-        version: '3.1.x'
-    - task: CmdLine@2
-      displayName: "Suppress welcome message"
-      inputs:
-        script: 'touch "$HOME"/.dotnet/"$(dotnet --version)".dotnetFirstUseSentinel'
+        version: '6.0.x'
     - task: DotNetCoreCLI@2
       displayName: "Build Huxley 2"
       env:
         DOTNET_CLI_TELEMETRY_OPTOUT: true
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+        DOTNET_NOLOGO: true
       inputs:
         command: 'build'
         projects: '**/*.csproj'
@@ -36,7 +32,7 @@ stages:
       displayName: "Unit test Huxley 2"
       env:
         DOTNET_CLI_TELEMETRY_OPTOUT: true
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+        DOTNET_NOLOGO: true
       inputs:
         command: 'test'
         projects: '**/*Tests/*.csproj'
@@ -49,7 +45,7 @@ stages:
       displayName: "Publish Huxley 2 package"
       env:
         DOTNET_CLI_TELEMETRY_OPTOUT: true
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+        DOTNET_NOLOGO: true
       inputs:
         command: 'publish'
         publishWebProjects: true
@@ -69,6 +65,4 @@ stages:
         appType: 'webAppLinux'
         WebAppName: 'huxley2'
         packageForLinux: '$(Build.ArtifactStagingDirectory)/**/Huxley2.zip'
-        RuntimeStack: 'DOTNETCORE|3.1'
-
-# DOTNET_SKIP_FIRST_TIME_EXPERIENCE removed in Core 3 will return hopefully
+        RuntimeStack: 'DOTNETCORE|6.0'
