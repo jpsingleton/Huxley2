@@ -1,18 +1,21 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Huxley2.Interfaces;
 using Huxley2.Models;
 using Microsoft.Extensions.Logging;
 using OpenLDBSVWS;
 using OpenLDBWS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Huxley2.Services
 {
     public class MapperService : IMapperService
     {
+        // P for train Services, B for bus services, S for ship services.
+        private static string STAFF_SERVICES_CODES = "PBS";
+
         private readonly ILogger<MapperService> _logger;
         private readonly IAccessTokenService _accessTokenService;
         private readonly ICrsService _crsService;
@@ -56,6 +59,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -84,6 +88,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -112,6 +117,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -140,6 +146,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -168,6 +175,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -196,6 +204,7 @@ namespace Huxley2.Services
                 numRows = request.NumRows,
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -220,6 +229,7 @@ namespace Huxley2.Services
                 filterList = MakeFilterList(request.FilterList, 15),
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -244,6 +254,7 @@ namespace Huxley2.Services
                 filterList = MakeFilterList(request.FilterList, 10),
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -268,6 +279,7 @@ namespace Huxley2.Services
                 filterList = MakeFilterList(request.FilterList, 25),
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
@@ -292,6 +304,7 @@ namespace Huxley2.Services
                 filterList = MakeFilterList(request.FilterList, 10),
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
+                services = STAFF_SERVICES_CODES,
             };
         }
 
