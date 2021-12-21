@@ -341,3 +341,6 @@ healthchecksdb
 
 # Env variables
 .env
+
+# Visual Studio Code
+.vscode
