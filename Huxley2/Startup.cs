@@ -1,5 +1,7 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System;
+using System.Net.Http;
 using Huxley2.Interfaces;
 using Huxley2.Services;
 using Microsoft.AspNetCore.Builder;
@@ -9,8 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenLDBSVWS;
-using System;
-using System.Net.Http;
 
 namespace Huxley2
 {
@@ -71,6 +71,7 @@ namespace Huxley2
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseETagger();
             app.UseRouting();
             // UseResponseCaching doesn't appear to be necessary to enable the ResponseCache attribute
             // but it is required to use VaryByQueryKeys in the future so enable middleware to be safe
