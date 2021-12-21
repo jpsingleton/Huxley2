@@ -28,14 +28,19 @@ There are detailed instructions on how to host your own instance on Azure in [th
 ### Running with Docker
 
 1. Ensure you have Docker and Docker Compose installed
-2. Create an `.env` file in the `Huxley2` directory with the access tokens. You can delete the ones you're not using. Example:
-```
+2. Create an `.env` file in the `Huxley2` directory with the access tokens. You can delete the ones you're not using.
+3. Run `docker-compose up`
+4. The app should be available at `localhost:8081`
+
+Example `.env` file:
+
+```env
 ACCESS_TOKEN=abcde12345
 STAFF_ACCESS_TOKEN=abcde12345
 CLIENT_ACCESS_TOKEN=abcde12345
 ```
-3. Run `docker-compose up`
-4. The app should be available at `localhost:8081`
+
+To rebuild use `docker-compose build` or `docker-compose up --build`.
 
 ## Station Codes File
 

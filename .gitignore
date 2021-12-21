@@ -344,3 +344,6 @@ healthchecksdb
 
 # Visual Studio Code
 .vscode
+
+# Docker build dir
+out/
