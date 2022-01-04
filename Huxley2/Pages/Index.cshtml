@@ -36,7 +36,7 @@
                         <abbr title="Application Programming Interface">API</abbr>
                         (called <a href="https://www.nationalrail.co.uk/100296.aspx">Darwin</a>).
                         It supports both the Public Version (PV) and the Staff Version (SV).
-                        It's built with ASP.NET Core <abbr title="Long Term Support">LTS</abbr>, C# 8.0 and lots of
+                        It's built with ASP.NET Core <abbr title="Long Term Support">LTS</abbr> (.NET 6.0), C# 10 and lots of
                         abbreviations!
                     </p>
                     <p>
@@ -53,10 +53,10 @@
                     </p>
                     @if (UpdateCheckService.UpdateAvailable)
                     {
-                                <div class="alert alert-info m-0" role="alert">
-                                    <a href="@UpdateCheckService.UpdateUrl?.AbsoluteUri">@UpdateCheckService.AvailableVersion</a>
-                                    is available
-                                </div>
+                        <div class="alert alert-info m-0" role="alert">
+                            <a href="@UpdateCheckService.UpdateUrl?.AbsoluteUri">@UpdateCheckService.AvailableVersion</a>
+                            is available
+                        </div>
                     }
                 </div>
 
