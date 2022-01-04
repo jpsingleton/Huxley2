@@ -1,25 +1,29 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System.Threading.Tasks;
 using FakeItEasy;
 using Huxley2.Controllers;
-using Huxley2.Interfaces;
-using Huxley2.Models;
 using Microsoft.Extensions.Logging;
-using OpenLDBSVWS;
-using System.Threading.Tasks;
+using Microsoft.Net.Http.Headers;
 using Xunit;
 
 namespace Huxley2Tests.Controllers
 {
-    public class StaffArrivalsControllerTests
+    public class StaffArrivalsControllerTests : StaffBaseControllerTests
     {
+        private StaffArrivalsController controller;
+
+        public StaffArrivalsControllerTests()
+        {
+            controller = new StaffArrivalsController(A.Fake<ILogger<StaffArrivalsController>>(), service)
+            {
+                ControllerContext = controllerContext
+            };
+        }
+
         [Fact]
         public async Task StaffArrivalsControllerGetPassesRequestToService()
         {
-            var request = new StationBoardRequest();
-            var service = A.Fake<IStationBoardStaffService>();
-            var controller = new StaffArrivalsController(A.Fake<ILogger<StaffArrivalsController>>(), service);
-
             await controller.Get(request);
 
             A.CallTo(() => service.GetArrivalBoardAsync(request)).MustHaveHappenedOnceExactly();
@@ -28,15 +32,17 @@ namespace Huxley2Tests.Controllers
         [Fact]
         public async Task StaffArrivalsControllerGetReturnsResponseFromService()
         {
-            var request = new StationBoardRequest();
-            var response = new BaseStationBoard();
-            var service = A.Fake<IStationBoardStaffService>();
-            A.CallTo(() => service.GetArrivalBoardAsync(request)).Returns(response);
-            var controller = new StaffArrivalsController(A.Fake<ILogger<StaffArrivalsController>>(), service);
-
             var board = await controller.Get(request);
 
             Assert.Equal(response, board);
+        }
+
+        [Fact]
+        public async Task StaffAllControllerSetsETag()
+        {
+            await controller.Get(request);
+
+            Assert.Equal(etag, httpResponse.Headers[HeaderNames.ETag]);
         }
     }
 }

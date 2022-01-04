@@ -1,10 +1,10 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System.Threading.Tasks;
 using Huxley2.Interfaces;
 using Huxley2.Models;
 using Microsoft.Extensions.Logging;
 using OpenLDBSVWS;
-using System.Threading.Tasks;
 
 namespace Huxley2.Services
 {
@@ -95,6 +95,6 @@ namespace Huxley2.Services
             return board.DeparturesBoard;
         }
 
-
+        public string GenerateChecksum(BaseStationBoard board) => ChecksumGenerator.GenerateChecksum(board);
     }
 }
