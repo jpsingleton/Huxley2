@@ -3,11 +3,11 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <UserSecretsId>51de7d1a-2f59-4a62-880b-89b08cc57a86</UserSecretsId>
-        <LangVersion>8.0</LangVersion>
+        <LangVersion>10.0</LangVersion>
         <Nullable>enable</Nullable>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
         <AssemblyName>Huxley2</AssemblyName>
-        <Version>2.0.2</Version>
+        <Version>2.0.3</Version>
         <Copyright>© James Singleton</Copyright>
     </PropertyGroup>
 
