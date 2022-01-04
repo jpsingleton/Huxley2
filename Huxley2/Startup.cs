@@ -28,6 +28,12 @@ namespace Huxley2
 
         public static void ConfigureServices(IServiceCollection services)
         {
+            // Shouldn't be a security issue as plaintext isn't chosen by the user and we aren't using auth or sessions
+            // https://docs.microsoft.com/en-us/aspnet/core/performance/response-compression?view=aspnetcore-6.0#compression-with-secure-protocol
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+            });
             // AddResponseCaching doesn't appear to add any more services but best to be explicit for the future
             services.AddResponseCaching();
             services.AddControllers();
@@ -65,6 +71,7 @@ namespace Huxley2
         {
             logger.LogInformation("Configuring Huxley 2 web API application");
 
+            app.UseResponseCompression();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
