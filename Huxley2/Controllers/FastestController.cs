@@ -3,12 +3,13 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Huxley2.Interfaces;
 using Huxley2.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using OpenLDBWS;
-using Microsoft.AspNetCore.Http;
-using Huxley2.Interfaces;
 
 namespace Huxley2.Controllers
 {
@@ -42,6 +43,10 @@ namespace Huxley2.Controllers
                 clock.Stop();
                 _logger.LogInformation("Open LDB API time {ElapsedMilliseconds:#,#}ms",
                     clock.ElapsedMilliseconds);
+
+                var checksum = _stationBoardService.GenerateChecksum(board);
+                Response.Headers[HeaderNames.ETag] = checksum;
+                _logger.LogInformation($"ETag: {checksum}");
 
                 return board;
             }

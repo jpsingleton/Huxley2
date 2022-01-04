@@ -1,5 +1,6 @@
-// https://gist.github.com/madskristensen/36357b1df9ddbfd123162cd4201124c4
-// Apache 2.0 license
+// Original: https://gist.github.com/madskristensen/36357b1df9ddbfd123162cd4201124c4 - Apache 2.0 license
+// Changes by James Singleton - EUPL-1.2
+// https://joinup.ec.europa.eu/collection/eupl/matrix-eupl-compatible-open-source-licences#section-2
 
 using System.IO;
 using System.Security.Cryptography;
@@ -31,9 +32,13 @@ public class ETagMiddleware
 
             if (IsEtagSupported(response))
             {
-                string checksum = CalculateChecksum(ms);
-
-                response.Headers[HeaderNames.ETag] = checksum;
+                // If etag is already set then we should use it
+                if (!response.Headers.TryGetValue(HeaderNames.ETag, out var checksum))
+                {
+                    // Otherwise generate our own
+                    checksum = CalculateChecksum(ms);
+                    response.Headers[HeaderNames.ETag] = checksum;
+                }
 
                 if (context.Request.Headers.TryGetValue(HeaderNames.IfNoneMatch, out var etag) && checksum == etag)
                 {
@@ -52,11 +57,11 @@ public class ETagMiddleware
         if (response.StatusCode != StatusCodes.Status200OK)
             return false;
 
-        // The 20kb length limit is not based in science. Feel free to change
-        if (response.Body.Length > 20 * 1024)
-            return false;
-
+        // If etag is already set then we should handle it
         if (response.Headers.ContainsKey(HeaderNames.ETag))
+            return true;
+
+        if (response.Body.Length > 1024 * 1024) // 1MB
             return false;
 
         return true;
@@ -64,9 +69,9 @@ public class ETagMiddleware
 
     private static string CalculateChecksum(MemoryStream ms)
     {
-        string checksum = "";
+        var checksum = "";
 
-        using (var algo = SHA1.Create())
+        using (var algo = SHA256.Create())
         {
             ms.Position = 0;
             byte[] bytes = algo.ComputeHash(ms);

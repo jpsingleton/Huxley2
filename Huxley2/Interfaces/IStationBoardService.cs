@@ -1,8 +1,8 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System.Threading.Tasks;
 using Huxley2.Models;
 using OpenLDBWS;
-using System.Threading.Tasks;
 
 namespace Huxley2.Interfaces
 {
@@ -13,5 +13,6 @@ namespace Huxley2.Interfaces
         Task<BaseStationBoard> GetArrivalDepartureBoardAsync(StationBoardRequest request);
         Task<BaseStationBoard> GetNextDeparturesAsync(StationBoardRequest request);
         Task<BaseStationBoard> GetFastestDeparturesAsync(StationBoardRequest request);
+        string GenerateChecksum(BaseStationBoard board);
     }
 }

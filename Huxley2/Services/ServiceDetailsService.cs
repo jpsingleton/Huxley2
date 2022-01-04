@@ -1,13 +1,13 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System;
+using System.Threading.Tasks;
 using Huxley2.Interfaces;
 using Huxley2.Models;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using OpenLDBSVWS;
 using OpenLDBWS;
-using System;
-using System.Threading.Tasks;
 
 namespace Huxley2.Services
 {
@@ -75,7 +75,7 @@ namespace Huxley2.Services
             }
 
             // Support URL safe base 64 encoding as it's more suitable for this situation
-            // https://en.wikipedia.org/wiki/Base64#URL_applications
+            // https://en.wikipedia.org/wiki/Base64#The_URL_applications
             // https://tools.ietf.org/html/rfc4648#section-5
             // Encoder available as part of ASP.NET Core: Microsoft.Extensions.WebEncoders
             // For more info read ASP.NET Core 2 High Performance (https://unop.uk/book) :)
@@ -108,5 +108,7 @@ namespace Huxley2.Services
             });
             return service.GetServiceDetailsResult;
         }
+
+        public string GenerateChecksum(object service) => ChecksumGenerator.GenerateChecksum(service);
     }
 }

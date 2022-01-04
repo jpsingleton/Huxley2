@@ -1,16 +1,16 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Huxley2.Extensions;
 using Huxley2.Interfaces;
 using Huxley2.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OpenLDBWS;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Huxley2.Services
 {
@@ -173,5 +173,7 @@ namespace Huxley2.Services
                 DelayedTrains = delayedTrains,
             };
         }
+
+        public string GenerateChecksum(DelaysResponse response) => ChecksumGenerator.GenerateChecksum(response);
     }
 }

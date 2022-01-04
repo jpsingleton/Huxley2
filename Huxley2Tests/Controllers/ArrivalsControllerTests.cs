@@ -1,25 +1,29 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System.Threading.Tasks;
 using FakeItEasy;
 using Huxley2.Controllers;
-using Huxley2.Interfaces;
-using Huxley2.Models;
 using Microsoft.Extensions.Logging;
-using OpenLDBWS;
-using System.Threading.Tasks;
+using Microsoft.Net.Http.Headers;
 using Xunit;
 
 namespace Huxley2Tests.Controllers
 {
-    public class ArrivalsControllerTests
+    public class ArrivalsControllerTests : BaseControllerTests
     {
+        private ArrivalsController controller;
+
+        public ArrivalsControllerTests()
+        {
+            controller = new ArrivalsController(A.Fake<ILogger<ArrivalsController>>(), service)
+            {
+                ControllerContext = controllerContext
+            };
+        }
+
         [Fact]
         public async Task ArrivalsControllerGetPassesRequestToService()
         {
-            var request = new StationBoardRequest();
-            var service = A.Fake<IStationBoardService>();
-            var controller = new ArrivalsController(A.Fake<ILogger<ArrivalsController>>(), service);
-
             await controller.Get(request);
 
             A.CallTo(() => service.GetArrivalBoardAsync(request)).MustHaveHappenedOnceExactly();
@@ -28,15 +32,17 @@ namespace Huxley2Tests.Controllers
         [Fact]
         public async Task ArrivalsControllerGetReturnsResponseFromService()
         {
-            var request = new StationBoardRequest();
-            var response = new BaseStationBoard();
-            var service = A.Fake<IStationBoardService>();
-            A.CallTo(() => service.GetArrivalBoardAsync(request)).Returns(response);
-            var controller = new ArrivalsController(A.Fake<ILogger<ArrivalsController>>(), service);
-
             var board = await controller.Get(request);
 
             Assert.Equal(response, board);
+        }
+
+        [Fact]
+        public async Task ArrivalsControllerSetsETag()
+        {
+            await controller.Get(request);
+
+            Assert.Equal(etag, httpResponse.Headers[HeaderNames.ETag]);
         }
     }
 }

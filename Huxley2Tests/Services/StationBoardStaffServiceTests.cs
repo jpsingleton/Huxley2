@@ -1,27 +1,37 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System;
+using System.Threading.Tasks;
 using FakeItEasy;
 using Huxley2.Interfaces;
 using Huxley2.Models;
 using Huxley2.Services;
 using Microsoft.Extensions.Logging;
 using OpenLDBSVWS;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Huxley2Tests.Services
 {
     public class StationBoardStaffServiceTests
     {
+        private StationBoardRequest restRequest;
+        private IMapperService mapper;
+        private LDBSVServiceSoap client;
+        private StationBoardStaffService service;
+
+        public StationBoardStaffServiceTests()
+        {
+            restRequest = new StationBoardRequest();
+            mapper = A.Fake<IMapperService>();
+            client = A.Fake<LDBSVServiceSoap>();
+            service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
+        }
+
         [Fact]
         public async Task StationBoardStaffServiceGetDepartureBoardCallsClient()
         {
-            var restRequest = new StationBoardRequest();
             var soapRequest = new GetDepartureBoardByCRSRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetDepartureBoardStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetDepartureBoardAsync(restRequest);
 
@@ -31,12 +41,9 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetDepartureBoardWithDetailsCallsClient()
         {
-            var restRequest = new StationBoardRequest { Expand = true };
+            restRequest.Expand = true;
             var soapRequest = new GetDepBoardWithDetailsRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetDepBoardWithDetailsStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetDepartureBoardAsync(restRequest);
 
@@ -46,12 +53,8 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetArrivalBoardCallsClient()
         {
-            var restRequest = new StationBoardRequest();
             var soapRequest = new GetArrivalBoardByCRSRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetArrivalBoardStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetArrivalBoardAsync(restRequest);
 
@@ -61,12 +64,9 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetArrivalBoardWithDetailsCallsClient()
         {
-            var restRequest = new StationBoardRequest { Expand = true };
+            restRequest.Expand = true;
             var soapRequest = new GetArrBoardWithDetailsRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetArrBoardWithDetailsStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetArrivalBoardAsync(restRequest);
 
@@ -76,12 +76,8 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetArrivalDepartureBoardCallsClient()
         {
-            var restRequest = new StationBoardRequest();
             var soapRequest = new GetArrivalDepartureBoardByCRSRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetArrivalDepartureBoardStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetArrivalDepartureBoardAsync(restRequest);
 
@@ -91,12 +87,9 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetArrivalDepartureBoardWithDetailsCallsClient()
         {
-            var restRequest = new StationBoardRequest { Expand = true };
+            restRequest.Expand = true;
             var soapRequest = new GetArrDepBoardWithDetailsRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetArrDepBoardWithDetailsStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetArrivalDepartureBoardAsync(restRequest);
 
@@ -106,12 +99,8 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetNextDeparturesCallsClient()
         {
-            var restRequest = new StationBoardRequest();
             var soapRequest = new GetNextDeparturesRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetNextDeparturesStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetNextDeparturesAsync(restRequest);
 
@@ -121,12 +110,9 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetNextDeparturesWithDetailsCallsClient()
         {
-            var restRequest = new StationBoardRequest { Expand = true };
+            restRequest.Expand = true;
             var soapRequest = new GetNextDeparturesWithDetailsRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetNextDeparturesWithDetailsStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetNextDeparturesAsync(restRequest);
 
@@ -136,12 +122,8 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetFastestDeparturesCallsClient()
         {
-            var restRequest = new StationBoardRequest();
             var soapRequest = new GetFastestDeparturesRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetFastestDeparturesStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetFastestDeparturesAsync(restRequest);
 
@@ -151,18 +133,52 @@ namespace Huxley2Tests.Services
         [Fact]
         public async Task StationBoardStaffServiceGetFastestDeparturesWithDetailsCallsClient()
         {
-            var restRequest = new StationBoardRequest { Expand = true };
+            restRequest.Expand = true;
             var soapRequest = new GetFastestDeparturesWithDetailsRequest();
-            var mapper = A.Fake<IMapperService>();
             A.CallTo(() => mapper.MapGetFastestDeparturesWithDetailsStaffRequest(restRequest)).Returns(soapRequest);
-            var client = A.Fake<LDBSVServiceSoap>();
-            var service = new StationBoardStaffService(A.Fake<ILogger<StationBoardStaffService>>(), mapper, client);
 
             await service.GetFastestDeparturesAsync(restRequest);
 
             A.CallTo(() => client.GetFastestDeparturesWithDetailsAsync(soapRequest)).MustHaveHappenedOnceExactly();
         }
 
+        [Fact]
+        public void StationBoardStaffServiceGeneratesChecksum()
+        {
+            var board = new DeparturesBoard();
+
+            var checksum = service.GenerateChecksum(board);
+
+            // SHA256 hash of empty object Base64 URL encoded _with_ extra quotes
+            Assert.Equal("\"zgb3gZHGVbuh9frUHx5P0x2-pnUSIEF_TPoBIrhuwjE\"", checksum);
+        }
+
+        [Fact]
+        public void StationBoardStaffServiceGeneratesChecksumIgnoringGeneratedAt()
+        {
+            var board = new DeparturesBoard { generatedAt = DateTime.Now };
+
+            var checksum = service.GenerateChecksum(board);
+
+            Assert.Equal("\"zgb3gZHGVbuh9frUHx5P0x2-pnUSIEF_TPoBIrhuwjE\"", checksum);
+
+            board.generatedAt = DateTime.Now.AddMinutes(5);
+
+            checksum = service.GenerateChecksum(board);
+
+            Assert.Equal("\"zgb3gZHGVbuh9frUHx5P0x2-pnUSIEF_TPoBIrhuwjE\"", checksum);
+        }
+
+        [Fact]
+        public void StationBoardStaffServiceGeneratesChecksumPreservingGeneratedAt()
+        {
+            var now = DateTime.Now;
+            var board = new DeparturesBoard { generatedAt = now };
+
+            service.GenerateChecksum(board);
+
+            Assert.Equal(now, board.generatedAt);
+        }
 
     }
 }

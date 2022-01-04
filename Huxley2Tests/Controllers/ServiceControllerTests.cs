@@ -1,29 +1,40 @@
 ﻿// © James Singleton. EUPL-1.2 (see the LICENSE file for the full license governing this code).
 
+using System;
+using System.Threading.Tasks;
 using FakeItEasy;
 using Huxley2.Controllers;
 using Huxley2.Interfaces;
 using Huxley2.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using OpenLDBWS;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Huxley2Tests.Controllers
 {
-    public class ServiceControllerTests
+    public class ServiceControllerTests : BaseControllerTests
     {
-        [Fact]
-        public async Task ServiceControllerGetPassesRequestFromRouteToService()
+        private new IServiceDetailsService service;
+        private ServiceController controller;
+        private new ServiceRequest request;
+
+        public ServiceControllerTests()
         {
-            var request = new ServiceRequest
+            service = A.Fake<IServiceDetailsService>();
+            controller = new ServiceController(A.Fake<ILogger<ServiceController>>(), service)
+            {
+                ControllerContext = controllerContext
+            };
+            request = new ServiceRequest
             {
                 ServiceId = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
             };
-            var service = A.Fake<IServiceDetailsService>();
-            var controller = new ServiceController(A.Fake<ILogger<ServiceController>>(), service);
+        }
 
+        [Fact]
+        public async Task ServiceControllerGetPassesRequestFromRouteToService()
+        {
             await controller.Get(request, new ServiceRequest());
 
             A.CallTo(() => service.GetServiceDetailsAsync(request)).MustHaveHappenedOnceExactly();
@@ -32,18 +43,12 @@ namespace Huxley2Tests.Controllers
         [Fact]
         public async Task ServiceControllerGetPassesRequestFromQueryToService()
         {
-            var routeRequest = new ServiceRequest
-            {
-                ServiceId = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
-            };
             var queryRequest = new ServiceRequest
             {
                 ServiceId = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
             };
-            var service = A.Fake<IServiceDetailsService>();
-            var controller = new ServiceController(A.Fake<ILogger<ServiceController>>(), service);
 
-            await controller.Get(routeRequest, queryRequest);
+            await controller.Get(request, queryRequest);
 
             A.CallTo(() => service.GetServiceDetailsAsync(queryRequest)).MustHaveHappenedOnceExactly();
         }
@@ -51,14 +56,8 @@ namespace Huxley2Tests.Controllers
         [Fact]
         public async Task ServiceControllerGetReturnsResponseFromService()
         {
-            var request = new ServiceRequest
-            {
-                ServiceId = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
-            };
             var response = new BaseServiceDetails();
-            var service = A.Fake<IServiceDetailsService>();
             A.CallTo(() => service.GetServiceDetailsAsync(request)).Returns(response);
-            var controller = new ServiceController(A.Fake<ILogger<ServiceController>>(), service);
 
             var result = await controller.Get(request, request);
 
@@ -68,13 +67,24 @@ namespace Huxley2Tests.Controllers
         [Fact]
         public async Task ServiceControllerGetThrowsExceptionIfNoServiceId()
         {
-            var request = new ServiceRequest();
+            request = new ServiceRequest();
             var response = new BaseServiceDetails();
-            var service = A.Fake<IServiceDetailsService>();
             A.CallTo(() => service.GetServiceDetailsAsync(request)).Returns(response);
-            var controller = new ServiceController(A.Fake<ILogger<ServiceController>>(), service);
 
-            await Assert.ThrowsAsync<Exception>(() => controller.Get(request, request));
+            var exception = await Assert.ThrowsAsync<Exception>(() => controller.Get(request, request));
+            Assert.Equal("No Service ID provided", exception.Message);
+        }
+
+        [Fact]
+        public async Task ServiceControllerSetsETag()
+        {
+            var response = new BaseServiceDetails();
+            A.CallTo(() => service.GetServiceDetailsAsync(request)).Returns(response);
+            A.CallTo(() => service.GenerateChecksum(response)).Returns(etag);
+
+            await controller.Get(request, request);
+
+            Assert.Equal(etag, httpResponse.Headers[HeaderNames.ETag]);
         }
     }
 }
