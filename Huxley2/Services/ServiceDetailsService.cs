@@ -71,7 +71,22 @@ namespace Huxley2.Services
             // We also accept the standard hexadecimal (base 16) GUID representation
             if (Guid.TryParse(request.ServiceId, out Guid sid))
             {
-                request.ServiceId = Convert.ToBase64String(sid.ToByteArray());
+                // use new GUID parsing method
+                request.ServiceId = OpenLDBWS.BaseServiceItem.FromGuid(sid);
+            }
+
+            // handle new-format version
+            // structure: 0000000XXXXXX_, where 0 is any numeric char and X is
+            //            any alpha char
+            if (request.ServiceId.Length == 15 && request.ServiceId.EndsWith("_"))
+            {
+                _logger.LogInformation($"Calling service details SOAP endpoint for {request.ServiceId}");
+                var s = await _soapClient.GetServiceDetailsAsync(new GetServiceDetailsRequest
+                {
+                    AccessToken = _accessTokenService.MakeAccessToken(request),
+                    serviceID = request.ServiceId,
+                });
+                return s.GetServiceDetailsResult;
             }
 
             // Support URL safe base 64 encoding as it's more suitable for this situation
