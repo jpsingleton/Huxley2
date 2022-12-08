@@ -76,9 +76,9 @@ namespace Huxley2.Services
             }
 
             // handle new-format version
-            // structure: 0000000XXXXXX_, where 0 is any numeric char and X is
-            //            any alpha char
-            if (request.ServiceId.Length == 15 && request.ServiceId.EndsWith("_"))
+            // structure: 0000000XXXXXXX, where 0 is any numeric char and X is
+            //            any alpha char or an underscore
+            if (request.ServiceId.Length == 15)
             {
                 _logger.LogInformation($"Calling service details SOAP endpoint for {request.ServiceId}");
                 var s = await _soapClient.GetServiceDetailsAsync(new GetServiceDetailsRequest
