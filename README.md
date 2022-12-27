@@ -58,6 +58,8 @@ If using a local server with a self-signed certificate:
 curl --silent --insecure https://localhost:5001/crs | jq -r '(.[0] | keys_unsorted) as $keys | $keys, map([.[ $keys[] ]])[] | @csv' > station_codes.csv
 ```
 
+If you regenerated the station codes CSV file on your own instance, change `StationCodesCsvUrl` in `Huxley2/appsettings.json` to the location of your CSV file.
+
 ## License
 
 Licensed under the [EUPL-1.2-or-later](https://joinup.ec.europa.eu/collection/eupl/introduction-eupl-licence).
