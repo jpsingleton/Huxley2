@@ -3,7 +3,6 @@
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 
 namespace OpenLDBWS
 {
@@ -20,9 +19,14 @@ namespace OpenLDBWS
 
         public Guid ServiceIdGuid => ToGuid(serviceIDField);
 
-        // as above
+        // note that while ServiceID is already URL-safe, the underscore char
+        // is not valid base64, so any inputs that previously assumed b64 input
+        // may break. As such, we will encode the string to be b64-safe as well
+        // as URL-safe
         [SuppressMessage("Design", "CA1056:Uri properties should not be strings", Justification = "Not a URL")]
-        public string ServiceIdUrlSafe => serviceIDField;
+        public string ServiceIdUrlSafe => WebEncoders.Base64UrlEncode(
+            System.Text.Encoding.UTF8.GetBytes(serviceIDField)
+        );
 
         public static Guid ToGuid(string serviceID)
         {
