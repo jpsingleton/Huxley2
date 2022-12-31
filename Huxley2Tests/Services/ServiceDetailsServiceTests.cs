@@ -20,9 +20,29 @@ namespace Huxley2Tests.Services
         private OpenLDBSVWS.LDBSVServiceSoap staffClient;
         private ServiceDetailsService service;
 
+        private string GenerateServiceId()
+        {
+            // generate a mock new-format serviceid
+            const string digitChars = "0123456789";
+            const string locChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var random = new System.Random();
+            var sid_array = new char[15];
+            for (int i = 0; i < 7; i++)
+            {
+                sid_array[i] = digitChars[random.Next(digitChars.Length)];
+            }
+            for (int i = 8; i < 14; i++)
+            {
+                sid_array[i] = locChars[random.Next(locChars.Length)];
+            }
+            sid_array[14] = '_';
+
+            return new String(sid_array);
+        }
+
         public ServiceDetailsServiceTests()
         {
-            var sid = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
+            var sid = GenerateServiceId();
             var cat = Guid.NewGuid().ToString();
             dat = Guid.NewGuid().ToString();
             restRequest = new ServiceRequest
