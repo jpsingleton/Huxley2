@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 
 namespace OpenLDBWS
 {
@@ -45,7 +46,7 @@ namespace OpenLDBWS
         public static string FromGuid(Guid serviceGuid)
         {
             // reverse of ToGuid above
-            string guidString = serviceGuid.ToString("N");
+            string guidString = serviceGuid.ToString("N", CultureInfo.InvariantCulture);
             string num = guidString.Substring(0, 7); // get digits
             string hexString = guidString.Substring(16, 16); // get letters
             byte[] bytes = Convert.FromHexString(hexString);
