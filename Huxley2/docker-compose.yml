@@ -1,6 +1,7 @@
 version: "3.9"
 services:
   huxley2:
+    # restart: always
     build: .
     environment:
       - DarwinAccessToken=${ACCESS_TOKEN}
