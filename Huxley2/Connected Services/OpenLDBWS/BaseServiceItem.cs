@@ -31,27 +31,40 @@ namespace OpenLDBWS
 
         public static Guid ToGuid(string serviceID)
         {
-            // because we have 128 bits to use in the GUID (and only ~56 bits
-            // from the service ID), we can afford to encode the 7 numeric
-            // characters directly and the 8 alpha characters as ASCII instead
-            // of finding a more efficient solution, and zero-pad the centre
-            string num = serviceID.Substring(0, 7); // digits
-            string str = serviceID.Substring(7, 8); // letters
-            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(str);
+            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(serviceID);
+
             string hexString = Convert.ToHexString(bytes);
-            string guidString = num + "000000000" + hexString.Substring(0, 16);
-            return new Guid(guidString);
+
+            // Need 8 chars for first group of GUID, plus one extra for the "rest" of the GUID.
+            // In reality, this should always be the case, but let's try to make this method as
+            // robust as possible.
+            if (hexString.Length < 9)
+            {
+                hexString = hexString.PadRight(9, '0');
+            }
+
+            // First group of GUID
+            string guidStart = hexString[0..8];
+
+            // Rest of the hex string to form the rest of the GUID, padding the left until it
+            // makes up a full GUID string when combined with the first group, and ensuring
+            // it's no longer than 24 chars in the unlikely case it is.
+            string guidRest = hexString[8..].PadLeft(24, '0').Substring(0, 24);
+
+            return new Guid(guidStart + guidRest);
         }
 
         public static string FromGuid(Guid serviceGuid)
         {
-            // reverse of ToGuid above
+            // Opposite of the above
+
             string guidString = serviceGuid.ToString("N", CultureInfo.InvariantCulture);
-            string num = guidString.Substring(0, 7); // get digits
-            string hexString = guidString.Substring(16, 16); // get letters
-            byte[] bytes = Convert.FromHexString(hexString);
-            string str = System.Text.Encoding.UTF8.GetString(bytes);
-            return num + str;
+
+            // Gets the raw byte array from the GUID, filtering out padded null bytes (0x00)
+            byte[] bytes = Array.FindAll(Convert.FromHexString(guidString), b => b != 0x00);
+
+            // Convert bytes back to string
+            return System.Text.Encoding.ASCII.GetString(bytes);
         }
     }
 }
