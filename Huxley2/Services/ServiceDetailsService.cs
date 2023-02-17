@@ -77,18 +77,13 @@ namespace Huxley2.Services
                 }
             }
 
-            if (request.ServiceId.Length == 15)
+            _logger.LogInformation($"Calling service details SOAP endpoint for {request.ServiceId}");
+            var service = await _soapClient.GetServiceDetailsAsync(new GetServiceDetailsRequest
             {
-                _logger.LogInformation($"Calling service details SOAP endpoint for {request.ServiceId}");
-                var service = await _soapClient.GetServiceDetailsAsync(new GetServiceDetailsRequest
-                {
-                    AccessToken = _accessTokenService.MakeAccessToken(request),
-                    serviceID = request.ServiceId,
-                });
-                return service.GetServiceDetailsResult;
-            }
-
-            throw new Exception("Invalid Service ID provided");
+                AccessToken = _accessTokenService.MakeAccessToken(request),
+                serviceID = request.ServiceId,
+            });
+            return service.GetServiceDetailsResult;
         }
 
         public string GenerateChecksum(object service) => ChecksumGenerator.GenerateChecksum(service);
