@@ -63,6 +63,6 @@ stages:
         ConnectionType: 'AzureRM'
         azureSubscription: 'Azure subscription 1(e78f5ea0-bc84-42ba-8122-2a20415a6d00)'
         appType: 'webAppLinux'
-        WebAppName: 'huxley2'
+        WebAppName: 'TrainWebAppNew'
         packageForLinux: '$(Build.ArtifactStagingDirectory)/**/Huxley2.zip'
         RuntimeStack: 'DOTNETCORE|6.0'
