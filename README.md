@@ -10,7 +10,7 @@ _Note:_ Huxley 2 is considered feature-complete and will only be updated to fix 
 
 ## About
 
-Huxley 2 is a CORS enabled cross-platform JSON ReST proxy for the GB NRE LDB WCF SOAP XML API (called Darwin). It supports both the Public Version (PV) and the Staff Version (SV). It's built with ASP.NET Core LTS (.NET 6.0), C# 10 and lots of abbreviations!
+Huxley 2 is a CORS enabled cross-platform JSON ReST proxy for the GB NRE LDB WCF SOAP XML API (called Darwin). It supports both the Public Version (PV) and the Staff Version (SV). It's built with ASP.NET Core LTS (.NET 8.0), C# 10 and lots of abbreviations!
 
 The primary purpose of Huxley 2 is to allow easy use of the LDB API from browser-based client-side PWAs made with JavaScript or TypeScript. Additionally, it opens up the Windows enterprise API to agile developers on macOS and Linux.
 
@@ -44,7 +44,7 @@ To rebuild use `docker-compose build` or `docker-compose up --build`.
 
 If you want to run the container in the background you can run `docker-compose up --detach`
 
-If you would like the docker container to _reboot upon restart_ on the host machine you can uncomment `restart: always` in the docker-compose.yml file and make sure the docker service is set to start upon bootup. 
+If you would like the docker container to _reboot upon restart_ on the host machine you can uncomment `restart: always` in the docker-compose.yml file and make sure the docker service is set to start upon bootup.
 
 ## Station Codes File
 

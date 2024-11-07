@@ -29,7 +29,7 @@ namespace Huxley2
         public static void ConfigureServices(IServiceCollection services)
         {
             // Shouldn't be a security issue as plaintext isn't chosen by the user and we aren't using auth or sessions
-            // https://docs.microsoft.com/en-us/aspnet/core/performance/response-compression?view=aspnetcore-6.0#compression-with-secure-protocol
+            // https://docs.microsoft.com/en-us/aspnet/core/performance/response-compression?view=aspnetcore-8.0
             services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
