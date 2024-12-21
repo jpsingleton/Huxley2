@@ -60,6 +60,7 @@ namespace Huxley2.Services
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
                 services = STAFF_SERVICES_CODES,
+                getNonPassengerServices = request.GetNonPassengerServices,
             };
         }
 
@@ -89,6 +90,7 @@ namespace Huxley2.Services
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
                 services = STAFF_SERVICES_CODES,
+                getNonPassengerServices = request.GetNonPassengerServices,
             };
         }
 
@@ -118,6 +120,7 @@ namespace Huxley2.Services
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
                 services = STAFF_SERVICES_CODES,
+                getNonPassengerServices = request.GetNonPassengerServices,
             };
         }
 
@@ -147,6 +150,7 @@ namespace Huxley2.Services
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
                 services = STAFF_SERVICES_CODES,
+                getNonPassengerServices = request.GetNonPassengerServices,
             };
         }
 
@@ -176,6 +180,7 @@ namespace Huxley2.Services
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
                 services = STAFF_SERVICES_CODES,
+                getNonPassengerServices = request.GetNonPassengerServices,
             };
         }
 
@@ -205,6 +210,7 @@ namespace Huxley2.Services
                 time = _dateTimeService.LocalNow.AddMinutes(request.TimeOffset), // local - not UTC
                 timeWindow = (ushort)request.TimeWindow, // max 1440mins (24hrs)
                 services = STAFF_SERVICES_CODES,
+                getNonPassengerServices = request.GetNonPassengerServices,
             };
         }
 
