@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
         <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
         <AssemblyName>Huxley2</AssemblyName>
-        <Version>2.0.6</Version>
+        <Version>2.0.7</Version>
         <Copyright>© James Singleton</Copyright>
     </PropertyGroup>
 

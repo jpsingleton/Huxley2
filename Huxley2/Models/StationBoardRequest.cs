@@ -55,5 +55,8 @@ namespace Huxley2.Models
         public bool Expand { get; set; } = false;
 
         public string Std { get; set; } = string.Empty;
+
+        [FromQuery]
+        public bool GetNonPassengerServices { get; set; } = false;
     }
 }
